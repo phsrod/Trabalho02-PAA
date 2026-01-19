@@ -1,0 +1,158 @@
+#include <stdio.h>
+#include <limits.h>
+#include <time.h>
+#include <string.h>
+#include <stdlib.h>
+
+#define NUM_EXECUCOES 11
+
+int preco(int i) {
+    return 3 * i - (i % 4);
+}
+
+int CorteDeHastesDP(int n, int precos[], int *r) {
+    r[0] = 0;
+
+    for (int j = 1; j <= n; j++) {
+        int lucro = INT_MIN;
+        for (int i = 1; i <= j; i++) {
+            int valor = precos[i] + r[j - i];
+            if (valor > lucro)
+                lucro = valor;
+        }
+        r[j] = lucro;
+    }
+
+    return r[n];
+}
+
+void executar_teste(int tamanho, FILE *arquivo) {
+    int *precos = (int*)malloc((tamanho + 1) * sizeof(int));
+    int *r = (int*)malloc((tamanho + 1) * sizeof(int));
+    double tempos[NUM_EXECUCOES];
+    double tempo_total = 0.0;
+    int resultado = 0;
+    
+    // Preencher tabela de preços
+    for (int i = 1; i <= tamanho; i++) {
+        precos[i] = preco(i);
+    }
+
+    printf("\nExecutando %d testes para tamanho %d (primeira sera ignorada)...\n", NUM_EXECUCOES, tamanho);
+    
+    // Executar 11 vezes
+    for (int exec = 0; exec < NUM_EXECUCOES; exec++) {
+        clock_t inicio = clock();
+        resultado = CorteDeHastesDP(tamanho, precos, r);
+        clock_t fim = clock();
+        
+        tempos[exec] = (double)(fim - inicio) / CLOCKS_PER_SEC;
+        
+        // Ignorar primeira execução (warm-up) no cálculo da média
+        if (exec > 0) {
+            tempo_total += tempos[exec];
+        }
+        
+        printf("  Execucao %2d: %.6f segundos%s\n", exec + 1, tempos[exec], 
+               exec == 0 ? " (warm-up - ignorada)" : "");
+    }
+    
+    double tempo_medio = tempo_total / (NUM_EXECUCOES - 1);
+    unsigned long memoria = (tamanho + 1) * sizeof(int);
+
+    printf("\n=== Versao Programacao Dinamica ===\n");
+    printf("Tamanho da barra: %d\n", tamanho);
+    printf("Lucro maximo: %d\n", resultado);
+    printf("Tempo medio (%d execucoes, ignorando warm-up): %.6f segundos\n", NUM_EXECUCOES - 1, tempo_medio);
+    printf("Memoria usada (vetor r): %lu bytes\n", memoria);
+
+    // Salvar resultados em CSV (modo append)
+    fprintf(arquivo, "Dinamico,%d,%d,%.6f,%lu\n", 
+            tamanho, resultado, tempo_medio, memoria);
+    
+    free(precos);
+    free(r);
+}
+
+void mostrar_menu() {
+    printf("\n========================================\n");
+    printf("    TESTE DE CORTE DE HASTES - DP\n");
+    printf("========================================\n");
+    printf("1. Definir tamanho manualmente\n");
+    printf("2. Teste com tamanho 10\n");
+    printf("3. Teste com tamanho 20\n");
+    printf("4. Teste com tamanho 30\n");
+    printf("5. Executar todos os testes (10, 20, 30)\n");
+    printf("0. Sair\n");
+    printf("========================================\n");
+    printf("Escolha uma opcao: ");
+}
+
+int main() {
+    FILE *arquivo;
+    int opcao;
+    int tamanho_manual;
+    int primeira_escrita = 1;
+
+    do {
+        mostrar_menu();
+        scanf("%d", &opcao);
+
+        if (opcao == 0) {
+            printf("\nEncerrando...\n");
+            break;
+        }
+
+        // Abrir arquivo em modo apropriado
+        if (primeira_escrita) {
+            arquivo = fopen("../results/resultados_dinamico.csv", "w");
+            if (arquivo != NULL) {
+                fprintf(arquivo, "algoritmo,tamanho,lucro_maximo,tempo_segundos,memoria_bytes\n");
+            }
+            primeira_escrita = 0;
+        } else {
+            arquivo = fopen("../results/resultados_dinamico.csv", "a");
+        }
+
+        if (arquivo == NULL) {
+            printf("Erro ao abrir arquivo CSV\n");
+            continue;
+        }
+
+        switch (opcao) {
+            case 1:
+                printf("Digite o tamanho da barra: ");
+                scanf("%d", &tamanho_manual);
+                if (tamanho_manual > 0) {
+                    executar_teste(tamanho_manual, arquivo);
+                } else {
+                    printf("Tamanho invalido!\n");
+                }
+                break;
+            case 2:
+                executar_teste(10, arquivo);
+                break;
+            case 3:
+                executar_teste(20, arquivo);
+                break;
+            case 4:
+                executar_teste(30, arquivo);
+                break;
+            case 5:
+                printf("\n*** EXECUTANDO TODOS OS TESTES ***\n");
+                executar_teste(10, arquivo);
+                executar_teste(20, arquivo);
+                executar_teste(30, arquivo);
+                printf("\n*** TODOS OS TESTES CONCLUIDOS ***\n");
+                break;
+            default:
+                printf("Opcao invalida!\n");
+        }
+
+        fclose(arquivo);
+        printf("\nResultados salvos em resultados_dinamico.csv\n");
+
+    } while (opcao != 0);
+
+    return 0;
+}
