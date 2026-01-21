@@ -25,21 +25,21 @@ def grafico_tempo_linhas(df, results_dir):
     
     for algoritmo in ['Recursivo', 'Dinamico']:
         dados = df[df['algoritmo'] == algoritmo].sort_values('tamanho')
-        ax.plot(dados['tamanho'], dados['tempo_segundos'], marker='o', 
+        ax.plot(dados['tamanho'], dados['tempo_milissegundos'], marker='o', 
                 linewidth=2.5, label=algoritmo, color=cores[algoritmo], markersize=8)
         
         # Adicionar valores nos pontos com offset para evitar sobreposição
         for idx, row in dados.iterrows():
             offset_y = 10 if algoritmo == 'Recursivo' else -15
-            ax.annotate(f"{row['tempo_segundos']:.6f}s", 
-                       (row['tamanho'], row['tempo_segundos']), 
+            ax.annotate(f"{row['tempo_milissegundos']:.6f}ms", 
+                       (row['tamanho'], row['tempo_milissegundos']), 
                        textcoords="offset points", 
                        xytext=(0, offset_y), 
                        ha='center', fontsize=9, fontweight='bold')
     
     ax.set_title('Tempo de Execução vs Tamanho da Barra', fontweight='bold', fontsize=14)
     ax.set_xlabel('Tamanho da barra', fontweight='bold', fontsize=12)
-    ax.set_ylabel('Tempo (segundos)', fontweight='bold', fontsize=12)
+    ax.set_ylabel('Tempo (milissegundos)', fontweight='bold', fontsize=12)
     ax.grid(True, alpha=0.3)
     ax.legend(fontsize=11)
 
@@ -109,7 +109,7 @@ def grafico_linhas(df, coluna_y, titulo, ylabel, nome_arquivo, results_dir):
         offset_y = offset_map.get(algoritmo, 8)
         for _, row in dados.iterrows():
             # Formatação diferente para tempo (6 decimais) vs memória (inteiro)
-            if coluna_y == 'tempo_segundos':
+            if coluna_y == 'tempo_milissegundos':
                 valor_str = f"{row[coluna_y]:.6f}s"
             else:
                 valor_str = f"{int(row[coluna_y])}"
@@ -132,7 +132,7 @@ def grafico_speedup(df, results_dir):
     if set(df['algoritmo']) != {'Recursivo', 'Dinamico'}:
         return
 
-    pivot = df.pivot_table(index='tamanho', columns='algoritmo', values='tempo_segundos')
+    pivot = df.pivot_table(index='tamanho', columns='algoritmo', values='tempo_milissegundos')
     pivot = pivot.dropna()
     if pivot.empty:
         return
@@ -166,8 +166,8 @@ def exibir_tabela_comparativa(df):
     
     # Calcular diferenças
     if len(df) == 2:
-        tempo_recursivo = df[df['algoritmo'] == 'Recursivo']['tempo_segundos'].values[0]
-        tempo_dinamico = df[df['algoritmo'] == 'Dinamico']['tempo_segundos'].values[0]
+        tempo_recursivo = df[df['algoritmo'] == 'Recursivo']['tempo_milissegundos'].values[0]
+        tempo_dinamico = df[df['algoritmo'] == 'Dinamico']['tempo_milissegundos'].values[0]
         
         if tempo_dinamico > 0:
             speedup = tempo_recursivo / tempo_dinamico
