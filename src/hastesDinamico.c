@@ -42,18 +42,19 @@ void executar_teste(int tamanho, FILE *arquivo) {
     
     // Executar 11 vezes
     for (int exec = 0; exec < NUM_EXECUCOES; exec++) {
-        clock_t inicio = clock();
+        struct timespec inicio, fim;
+        clock_gettime(CLOCK_MONOTONIC, &inicio);
         resultado = CorteDeHastesDP(tamanho, precos, r);
-        clock_t fim = clock();
+        clock_gettime(CLOCK_MONOTONIC, &fim);
         
-        tempos[exec] = (double)(fim - inicio) / CLOCKS_PER_SEC;
+        tempos[exec] = ((fim.tv_sec - inicio.tv_sec) + (fim.tv_nsec - inicio.tv_nsec) / 1e9) * 1000.0;
         
         // Ignorar primeira execução (warm-up) no cálculo da média
         if (exec > 0) {
             tempo_total += tempos[exec];
         }
         
-        printf("  Execucao %2d: %.6f segundos%s\n", exec + 1, tempos[exec], 
+        printf("  Execucao %2d: %.6f milissegundos%s\n", exec + 1, tempos[exec], 
                exec == 0 ? " (warm-up - ignorada)" : "");
     }
     
@@ -63,7 +64,7 @@ void executar_teste(int tamanho, FILE *arquivo) {
     printf("\n=== Versao Programacao Dinamica ===\n");
     printf("Tamanho da barra: %d\n", tamanho);
     printf("Lucro maximo: %d\n", resultado);
-    printf("Tempo medio (%d execucoes, ignorando warm-up): %.6f segundos\n", NUM_EXECUCOES - 1, tempo_medio);
+    printf("Tempo medio (%d execucoes, ignorando warm-up): %.6f milissegundos\n", NUM_EXECUCOES - 1, tempo_medio);
     printf("Memoria usada (vetor r): %lu bytes\n", memoria);
 
     // Salvar resultados em CSV (modo append)
@@ -105,13 +106,13 @@ int main() {
 
         // Abrir arquivo em modo apropriado
         if (primeira_escrita) {
-            arquivo = fopen("../results/resultados_dinamico.csv", "w");
+            arquivo = fopen("results/resultados_dinamico.csv", "w");
             if (arquivo != NULL) {
-                fprintf(arquivo, "algoritmo,tamanho,lucro_maximo,tempo_segundos,memoria_bytes\n");
+                fprintf(arquivo, "algoritmo,tamanho,lucro_maximo,tempo_milissegundos,memoria_bytes\n");
             }
             primeira_escrita = 0;
         } else {
-            arquivo = fopen("../results/resultados_dinamico.csv", "a");
+            arquivo = fopen("results/resultados_dinamico.csv", "a");
         }
 
         if (arquivo == NULL) {

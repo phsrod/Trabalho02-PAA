@@ -51,18 +51,19 @@ void executar_teste(int tamanho, FILE *arquivo) {
     for (int exec = 0; exec < NUM_EXECUCOES; exec++) {
         total_chamadas = 0; // Resetar contador
         
-        clock_t inicio = clock();
+        struct timespec inicio, fim;
+        clock_gettime(CLOCK_MONOTONIC, &inicio);
         resultado = CorteDeHastes(tamanho, precos);
-        clock_t fim = clock();
+        clock_gettime(CLOCK_MONOTONIC, &fim);
         
-        tempos[exec] = (double)(fim - inicio) / CLOCKS_PER_SEC;
+        tempos[exec] = ((fim.tv_sec - inicio.tv_sec) + (fim.tv_nsec - inicio.tv_nsec) / 1e9) * 1000.0;
         
         // Ignorar primeira execução (warm-up) no cálculo da média
         if (exec > 0) {
             tempo_total += tempos[exec];
         }
         
-        printf("  Execucao %2d: %.6f segundos (chamadas: %lld)%s\n", 
+        printf("  Execucao %2d: %.6f milissegundos (chamadas: %lld)%s\n", 
                exec + 1, tempos[exec], total_chamadas,
                exec == 0 ? " (warm-up - ignorada)" : "");
     }
@@ -73,7 +74,7 @@ void executar_teste(int tamanho, FILE *arquivo) {
     printf("\n=== Versao Recursiva ===\n");
     printf("Tamanho da barra: %d\n", tamanho);
     printf("Lucro maximo: %d\n", resultado);
-    printf("Tempo medio (%d execucoes, ignorando warm-up): %.6f segundos\n", NUM_EXECUCOES - 1, tempo_medio);
+    printf("Tempo medio (%d execucoes, ignorando warm-up): %.6f milissegundos\n", NUM_EXECUCOES - 1, tempo_medio);
     printf("Total de chamadas recursivas (ultima exec): %lld\n", total_chamadas);
     printf("Memoria estimada (stack): %lu bytes\n", memoria_estimada);
 
@@ -115,13 +116,13 @@ int main() {
 
         // Abrir arquivo em modo apropriado
         if (primeira_escrita) {
-            arquivo = fopen("../results/resultados_recursivo.csv", "w");
+            arquivo = fopen("results/resultados_recursivo.csv", "w");
             if (arquivo != NULL) {
-                fprintf(arquivo, "algoritmo,tamanho,lucro_maximo,tempo_segundos,memoria_bytes\n");
+                fprintf(arquivo, "algoritmo,tamanho,lucro_maximo,tempo_milissegundos,memoria_bytes\n");
             }
             primeira_escrita = 0;
         } else {
-            arquivo = fopen("../results/resultados_recursivo.csv", "a");
+            arquivo = fopen("results/resultados_recursivo.csv", "a");
         }
 
         if (arquivo == NULL) {
