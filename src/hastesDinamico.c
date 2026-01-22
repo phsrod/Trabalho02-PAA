@@ -106,13 +106,13 @@ int main() {
 
         // Abrir arquivo em modo apropriado
         if (primeira_escrita) {
-            arquivo = fopen("results/resultados_dinamico.csv", "w");
+            arquivo = fopen("../results/hastesDinamico/files/resultados_dinamico.csv", "w");
             if (arquivo != NULL) {
                 fprintf(arquivo, "algoritmo,tamanho,lucro_maximo,tempo_milissegundos,memoria_bytes\n");
             }
             primeira_escrita = 0;
         } else {
-            arquivo = fopen("results/resultados_dinamico.csv", "a");
+            arquivo = fopen("../results/hastesDinamico/files/resultados_dinamico.csv", "a");
         }
 
         if (arquivo == NULL) {

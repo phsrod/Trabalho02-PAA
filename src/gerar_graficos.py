@@ -8,8 +8,8 @@ def ler_resultados():
     script_dir = os.path.dirname(os.path.abspath(__file__))
     results_dir = os.path.join(os.path.dirname(script_dir), 'results')
     
-    dinamico = pd.read_csv(os.path.join(results_dir, 'resultados_dinamico.csv'))
-    recursivo = pd.read_csv(os.path.join(results_dir, 'resultados_recursivo.csv'))
+    dinamico = pd.read_csv(os.path.join(results_dir, 'hastesDinamico/files/resultados_dinamico.csv'))
+    recursivo = pd.read_csv(os.path.join(results_dir, 'hastesRecursivo/files/resultados_recursivo.csv'))
 
     # Combinar os dataframes (podem ter várias execuções com tamanhos diferentes)
     resultados = pd.concat([dinamico, recursivo], ignore_index=True)
@@ -187,8 +187,8 @@ def main():
     results_dir = os.path.join(os.path.dirname(script_dir), 'results')
     
     # Verificar se os arquivos CSV existem
-    csv_dinamico = os.path.join(results_dir, 'resultados_dinamico.csv')
-    csv_recursivo = os.path.join(results_dir, 'resultados_recursivo.csv')
+    csv_dinamico = os.path.join(results_dir, 'hastesDinamico/files/resultados_dinamico.csv')
+    csv_recursivo = os.path.join(results_dir, 'hastesRecursivo/files/resultados_recursivo.csv')
     
     if not os.path.exists(csv_dinamico):
         print("ERRO: arquivo 'resultados_dinamico.csv' não encontrado!")
