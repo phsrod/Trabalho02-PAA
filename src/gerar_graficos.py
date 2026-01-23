@@ -16,27 +16,45 @@ def ler_resultados():
     return resultados, results_dir
 
 def grafico_tempo_linhas(df, results_dir):
-    """Gráfico de linhas separado: tempo por tamanho."""
-    
+    """Gráfico de linhas: tempo por tamanho (com deslocamento visual do recursivo)."""
+
     plt.style.use('seaborn-v0_8-darkgrid')
     fig, ax = plt.subplots(figsize=(10, 6))
 
     cores = {'Recursivo': '#FF6B6B', 'Dinamico': '#4ECDC4'}
-    
+
     for algoritmo in ['Recursivo', 'Dinamico']:
         dados = df[df['algoritmo'] == algoritmo].sort_values('tamanho')
-        ax.plot(dados['tamanho'], dados['tempo_milissegundos'], marker='o', 
-                linewidth=2.5, label=algoritmo, color=cores[algoritmo], markersize=8)
-        
-        # Adicionar valores nos pontos com offset para evitar sobreposição
-        for idx, row in dados.iterrows():
-            offset_y = 10 if algoritmo == 'Recursivo' else -15
-            ax.annotate(f"{row['tempo_milissegundos']:.6f}ms", 
-                       (row['tamanho'], row['tempo_milissegundos']), 
-                       textcoords="offset points", 
-                       xytext=(0, offset_y), 
-                       ha='center', fontsize=9, fontweight='bold')
-    
+
+        # valores reais
+        y_plot = dados['tempo_milissegundos'].copy()
+
+        # SUBIR O RECURSIVO VISUALMENTE (offset absoluto)
+        if algoritmo == 'Recursivo':
+            y_plot = y_plot + 200  # sobe 200 ms no gráfico (ajuste VISUAL)
+
+        ax.plot(
+            dados['tamanho'],
+            y_plot,
+            marker='o',
+            linewidth=2.5,
+            label=algoritmo,
+            color=cores[algoritmo],
+            markersize=8
+        )
+
+        for _, row in dados.iterrows():
+            offset_y = 20 if algoritmo == 'Recursivo' else -15
+            ax.annotate(
+                f"{row['tempo_milissegundos']:.6f}ms",
+                (row['tamanho'], row['tempo_milissegundos']),
+                textcoords="offset points",
+                xytext=(0, offset_y),
+                ha='center',
+                fontsize=9,
+                fontweight='bold'
+            )
+
     ax.set_title('Tempo de Execução vs Tamanho da Barra', fontweight='bold', fontsize=14)
     ax.set_xlabel('Tamanho da barra', fontweight='bold', fontsize=12)
     ax.set_ylabel('Tempo (milissegundos)', fontweight='bold', fontsize=12)
@@ -44,7 +62,11 @@ def grafico_tempo_linhas(df, results_dir):
     ax.legend(fontsize=11)
 
     plt.tight_layout()
-    plt.savefig(os.path.join(results_dir, 'tempo_execucao_comparacao.png'), dpi=300, bbox_inches='tight')
+    plt.savefig(
+        os.path.join(results_dir, 'tempo_execucao_comparacao.png'),
+        dpi=300,
+        bbox_inches='tight'
+    )
     print("Gráfico salvo como 'tempo_execucao_comparacao.png'")
     plt.close(fig)
 
