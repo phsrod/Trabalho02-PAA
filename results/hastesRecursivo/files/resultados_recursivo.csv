@@ -1,0 +1,4 @@
+algoritmo,tamanho,lucro_maximo,tempo_milissegundos,memoria_bytes
+Recursivo,10,28,0.006968,480
+Recursivo,20,60,7.513419,960
+Recursivo,30,88,4530.137164,1440

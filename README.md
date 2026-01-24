@@ -131,6 +131,32 @@ Foram definidos múltiplos tamanhos de entrada, variando o comprimento da haste,
 
 ## 📁 Estrutura do Projeto
 
+```text
+
+TRABALHO02-PAA/
+├── docs/                        # Documentação técnica e enunciados
+│   ├── Apresentação de Slides
+|   ├── Relatório
+│   └── Trabalho - Programação Dinâmi...
+├── results/                     # Resultados das execuções e visualizações
+│   ├── hastesDinamico/          # Saídas da abordagem por Programação Dinâmica
+│   │   └── files/
+│   │       └── resultados_dinamico.csv
+│   ├── hastesRecursivo/         # Saídas da abordagem Recursiva simples
+│   │   └── files/
+│   │       └── resultados_recursivo.csv
+│   ├── memoria_vs_tamanho.png   # Gráfico de consumo de memória
+│   ├── speedup_recursivo_sobre... # Análise de ganho de performance
+│   └── tempo_execucao_compara... # Comparativo de tempo de execução
+├── src/                         # Código-fonte do projeto
+│   ├── gerar_graficos.py        # Script Python para geração de gráficos
+│   ├── hastesDinamico.c         # Implementação em C (Programação Dinâmica)
+│   └── hastesRecursivo.c        # Implementação em C (Recursão simples)
+├── .gitignore                   # Arquivos ignorados pelo controle de versão
+├── LICENSE                      # Licença de uso do projeto
+└── README.md                    # Documentação principal do repositório
+
+```
 
 ---
 
@@ -140,25 +166,25 @@ x -> para marcar
 
 ### 🔧 Implementação
 - [x] Escolha do algoritmo
-- [ ] Implementação recursiva
-- [ ] Implementação com Programação Dinâmica
-- [ ] Organização e documentação do código
+- [x] Implementação recursiva
+- [x] Implementação com Programação Dinâmica
+- [x] Organização e documentação do código
 
 ### 🧪 Testes
-- [ ] Definição dos cenários de teste
-- [ ] Definição das métricas de análise
-- [ ] Execução comparativa
-- [ ] Coleta de métricas
+- [x] Definição dos cenários de teste
+- [x] Definição das métricas de análise
+- [x] Execução comparativa
+- [x] Coleta de métricas
 
 ### 📊 Análise
-- [ ] Criação de tabelas
-- [ ] Geração de gráficos
-- [ ] Análise crítica dos resultados
+- [x] Criação de tabelas
+- [x] Geração de gráficos
+- [x] Análise crítica dos resultados
 
 ### 📝 Entregas
-- [ ] Trabalho escrito
-- [ ] Slides
-- [ ] Apresentação oral
+- [x] Trabalho escrito
+- [x] Slides
+- [x] Apresentação oral
 
 ---
 
@@ -182,4 +208,4 @@ x -> para marcar
 
 ---
 
-**📌 Última atualização:** 18/01/2025  
+**📌 Última atualização:** 24/01/2025  

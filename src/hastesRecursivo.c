@@ -10,12 +10,28 @@
 /* Contador de chamadas recursivas para estimar memória */
 long long total_chamadas = 0;
 
-/* Função de preço */
+/**
+ * @brief Calcula o preço de uma haste de tamanho i.
+ * @param i Tamanho da haste.
+ * @return Valor inteiro correspondente ao preço da haste.
+ *
+ * A função define a política de preços utilizada nos testes
+ * do problema de corte de hastes.
+ */
 int preco(int i) {
     return 3 * i - (i % 4);
 }
 
-/* Corte de Hastes recursivo */
+/**
+ * @brief Resolve o problema do corte de hastes utilizando abordagem recursiva.
+ * @param n Tamanho da barra a ser cortada.
+ * @param precos Vetor contendo os preços das hastes de tamanho 1 até n.
+ * @return Lucro máximo obtido para uma barra de tamanho n.
+ *
+ * Implementação recursiva ingênua que explora todas as possíveis
+ * combinações de corte. Apresenta sobreposição de subproblemas,
+ * resultando em crescimento exponencial do tempo de execução.
+ */
 int CorteDeHastes(int n, int precos[]) {
     total_chamadas++;
 
@@ -34,6 +50,16 @@ int CorteDeHastes(int n, int precos[]) {
     return lucro;
 }
 
+/**
+ * @brief Executa múltiplos testes do algoritmo recursivo para um dado tamanho de barra.
+ * @param tamanho Tamanho da barra utilizada no teste.
+ * @param arquivo Ponteiro para o arquivo CSV onde os resultados serão armazenados.
+ * @return void
+ *
+ * A função executa o algoritmo NUM_EXECUCOES vezes, ignora a primeira execução
+ * (warm-up), calcula o tempo médio e estima o consumo de memória da pilha
+ * com base no número de frames recursivos.
+ */
 void executar_teste(int tamanho, FILE *arquivo) {
     int *precos = (int*)malloc((tamanho + 1) * sizeof(int));
     double tempos[NUM_EXECUCOES];
@@ -85,6 +111,13 @@ void executar_teste(int tamanho, FILE *arquivo) {
     free(precos);
 }
 
+/**
+ * @brief Exibe o menu de opções do programa.
+ * @return void
+ *
+ * Apresenta ao usuário as opções disponíveis para execução
+ * dos testes do algoritmo recursivo.
+ */
 void mostrar_menu() {
     printf("\n========================================\n");
     printf("  TESTE DE CORTE DE HASTES - RECURSIVO\n");
@@ -99,6 +132,13 @@ void mostrar_menu() {
     printf("Escolha uma opcao: ");
 }
 
+/**
+ * @brief Função principal do programa.
+ * @return Código de encerramento do programa (0 em caso de sucesso).
+ *
+ * Controla o fluxo do programa, gerencia a interação com o usuário,
+ * coordena a execução dos testes e a gravação dos resultados em arquivo CSV.
+ */
 int main() {
     FILE *arquivo;
     int opcao;

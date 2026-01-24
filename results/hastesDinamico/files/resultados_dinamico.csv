@@ -1,0 +1,4 @@
+algoritmo,tamanho,lucro_maximo,tempo_milissegundos,memoria_bytes
+Dinamico,10,28,0.000299,44
+Dinamico,20,60,0.000894,84
+Dinamico,30,88,0.002024,124

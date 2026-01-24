@@ -6,10 +6,28 @@
 
 #define NUM_EXECUCOES 11
 
+/**
+ * @brief Calcula o preço de uma haste de tamanho i com base em uma função definida.
+ * @param i Tamanho da haste.
+ * @return Valor inteiro correspondente ao preço da haste.
+ *
+ * Esta função define uma política de preços utilizada nos testes
+ * do problema de corte de hastes.
+ */
 int preco(int i) {
     return 3 * i - (i % 4);
 }
 
+/**
+ * @brief Resolve o problema do corte de hastes utilizando Programação Dinâmica.
+ * @param n Tamanho da barra a ser cortada.
+ * @param precos Vetor contendo os preços das hastes de tamanho 1 até n.
+ * @param r Vetor auxiliar utilizado para armazenar os lucros máximos intermediários.
+ * @return Lucro máximo obtido para uma barra de tamanho n.
+ *
+ * A função utiliza uma abordagem bottom-up, explorando subestrutura ótima
+ * e evitando recomputações redundantes por meio de armazenamento dos resultados.
+ */
 int CorteDeHastesDP(int n, int precos[], int *r) {
     r[0] = 0;
 
@@ -26,6 +44,16 @@ int CorteDeHastesDP(int n, int precos[], int *r) {
     return r[n];
 }
 
+/**
+ * @brief Executa múltiplos testes do algoritmo de programação dinâmica
+ *        para um determinado tamanho de barra e registra os resultados.
+ * @param tamanho Tamanho da barra utilizada no teste.
+ * @param arquivo Ponteiro para o arquivo CSV onde os resultados serão armazenados.
+ * @return void
+ *
+ * A função executa o algoritmo NUM_EXECUCOES vezes, ignora a primeira execução
+ * (warm-up) e calcula o tempo médio de execução, além do uso de memória.
+ */
 void executar_teste(int tamanho, FILE *arquivo) {
     int *precos = (int*)malloc((tamanho + 1) * sizeof(int));
     int *r = (int*)malloc((tamanho + 1) * sizeof(int));
@@ -75,6 +103,13 @@ void executar_teste(int tamanho, FILE *arquivo) {
     free(r);
 }
 
+/**
+ * @brief Exibe o menu de opções do programa na tela.
+ * @return void
+ *
+ * Apresenta ao usuário as opções disponíveis para execução
+ * dos testes do algoritmo de programação dinâmica.
+ */
 void mostrar_menu() {
     printf("\n========================================\n");
     printf("    TESTE DE CORTE DE HASTES - DP\n");
@@ -89,6 +124,14 @@ void mostrar_menu() {
     printf("Escolha uma opcao: ");
 }
 
+/**
+ * @brief Função principal do programa.
+ * @return Código de encerramento do programa (0 em caso de sucesso).
+ *
+ * Controla o fluxo de execução, gerencia a interação com o usuário,
+ * chama os testes do algoritmo e coordena a escrita dos resultados
+ * no arquivo CSV.
+ */
 int main() {
     FILE *arquivo;
     int opcao;

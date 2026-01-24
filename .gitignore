@@ -1,6 +1,4 @@
 .vscode/
-results/*
-!results/.gitkeep
 *exe
-hastesDinamico
-hastesRecursivo
+src/hastesDinamico
+src/hastesRecursivo

@@ -3,7 +3,14 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 def ler_resultados():
-    """Lê os arquivos CSV gerados pelos programas C"""
+    """
+    Lê os arquivos CSV gerados pelos programas em C (recursivo e dinâmico),
+    localizados na pasta 'results', e consolida os dados em um único DataFrame.
+
+    Retorno:
+        resultados (DataFrame): dados combinados dos dois algoritmos
+        results_dir (str): caminho absoluto do diretório 'results'
+    """
     # Usar o diretório results (pasta pai de src)
     script_dir = os.path.dirname(os.path.abspath(__file__))
     results_dir = os.path.join(os.path.dirname(script_dir), 'results')
@@ -16,7 +23,13 @@ def ler_resultados():
     return resultados, results_dir
 
 def grafico_tempo_linhas(df, results_dir):
-    """Gráfico de linhas: tempo por tamanho (com deslocamento visual do recursivo)."""
+    """
+    Gera um gráfico de linhas comparando o tempo de execução dos algoritmos
+    Recursivo e Dinâmico em função do tamanho da barra.
+
+    Um deslocamento visual é aplicado apenas à curva do algoritmo recursivo
+    para evitar sobreposição e melhorar a legibilidade.
+    """
 
     plt.style.use('seaborn-v0_8-darkgrid')
     fig, ax = plt.subplots(figsize=(10, 6))
@@ -72,7 +85,16 @@ def grafico_tempo_linhas(df, results_dir):
 
 
 def grafico_memoria_linhas(df):
-    """Gráfico de linhas separado: memória por tamanho."""
+    """
+    Função genérica para gerar gráficos de linhas comparando algoritmos
+    para uma métrica específica (tempo ou memória).
+
+    Parâmetros:
+        coluna_y (str): coluna a ser utilizada no eixo Y
+        titulo (str): título do gráfico
+        ylabel (str): rótulo do eixo Y
+        nome_arquivo (str): nome do arquivo de saída
+    """
     
     plt.style.use('seaborn-v0_8-darkgrid')
     fig, ax = plt.subplots(figsize=(10, 6))
@@ -149,7 +171,11 @@ def grafico_linhas(df, coluna_y, titulo, ylabel, nome_arquivo, results_dir):
 
 
 def grafico_speedup(df, results_dir):
-    """Gráfico de speedup (Recursivo / Dinâmico) por tamanho."""
+    """
+    Gera um gráfico de speedup, definido como a razão entre o tempo
+    de execução do algoritmo recursivo e o algoritmo dinâmico.
+    """
+
 
     if set(df['algoritmo']) != {'Recursivo', 'Dinamico'}:
         return
@@ -201,7 +227,13 @@ def exibir_tabela_comparativa(df):
         print("="*80 + "\n")
 
 def main():
-    """Função principal"""
+    """
+    Função principal responsável por:
+    - Verificar a existência dos arquivos CSV
+    - Ler os dados experimentais
+    - Gerar os gráficos comparativos
+    """
+
     print("Gerando gráficos comparativos...")
     
     # Usar o diretório results (pasta pai de src)
@@ -237,5 +269,6 @@ def main():
     # Speedup (Recursivo / Dinâmico) por tamanho
     grafico_speedup(df, results_dir)
 
+# Ponto de entrada do programa
 if __name__ == "__main__":
     main()
